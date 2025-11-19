@@ -1,4 +1,15 @@
-<div style="background:rgba(255, 255, 255, 0.1);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);color:#fff;padding:8px 0;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,0.5);">
+<style>
+.pencilbox-banner {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  padding: 8px 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+</style>
+
+<div style="color:#fff;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,0.5);">
   <div style="font-size:14px;font-weight:500;color:#fff;">A360 webinar in</div>
   <div style="display:flex;gap:12px;align-items:center;">
     <div style="text-align:center;">
@@ -25,7 +36,11 @@
 
 <script>
 const target = new Date("2025-12-16T13:00:00-05:00");
-const digits = document.querySelectorAll('div[style*="font-size:18px"]');
+
+// Simple, direct selector for countdown numbers
+const digits = document.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
+
+console.log('Found digits:', digits.length, digits); // Debug log
 
 const update = () => {
   let diff = (target - new Date()) / 1000;
@@ -36,8 +51,20 @@ const update = () => {
     Math.floor(diff % 3600 / 60),
     Math.floor(diff % 60)
   ];
-  digits.forEach((el,i) => el.textContent = vals[i].toString().padStart(2,"0"));
+  
+  console.log('Time values:', vals); // Debug log
+  console.log('Current time:', new Date().toLocaleString());
+  console.log('Target time:', target.toLocaleString());
+  
+  digits.forEach((el, i) => {
+    if (el && vals[i] !== undefined) {
+      console.log(`Setting digit ${i} to:`, vals[i]);
+      el.textContent = vals[i].toString().padStart(2, "0");
+    }
+  });
 };
+
+// Initial update and start interval
 update();
-setInterval(update,1000);
+setInterval(update, 1000);
 </script>

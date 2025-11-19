@@ -6,7 +6,7 @@
 /* Banner container */
 .pencilbox-banner {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   background: #111;
@@ -17,7 +17,7 @@
   justify-content: center;
   gap: 20px;
   z-index: 9999;
-  transform: translateY(100%);
+  transform: translateY(-100%);
   transition: transform 0.4s ease;
 }
 
