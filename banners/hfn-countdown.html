@@ -2,72 +2,90 @@
   <div style="font-size:14px;font-weight:500;color:#fff;">A360 webinar in</div>
   <div style="display:flex;gap:12px;align-items:center;">
     <div style="text-align:center;">
-      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
       <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">days</div>
     </div>
     <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
     <div style="text-align:center;">
-      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
       <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">hrs</div>
     </div>
     <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
     <div style="text-align:center;">
-      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
       <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">min</div>
     </div>
     <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
     <div style="text-align:center;">
-      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
       <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">sec</div>
     </div>
   </div>
 </div>
 
 <script>
-// Wait for the banner to be added to the DOM
-setTimeout(() => {
+// Multiple attempts to ensure countdown works
+function initCountdown() {
   const target = new Date("2025-12-16T13:00:00-05:00");
-
-  // Find countdown elements within the banner
-  const banner = document.querySelector('.pencilbox-banner');
-  if (!banner) {
-    console.error('Banner not found!');
-    return;
+  
+  // Try different selectors
+  let digits = document.querySelectorAll('.countdown-digit');
+  if (!digits.length) {
+    digits = document.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
+  }
+  
+  console.log('Countdown init - found digits:', digits.length, digits);
+  
+  if (!digits.length) {
+    console.error('No countdown digits found!');
+    return false;
   }
 
-  const digits = banner.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
-  
-  console.log('Banner found:', banner);
-  console.log('Found digits:', digits.length, digits);
-
   const update = () => {
-    let diff = (target - new Date()) / 1000;
-    if (diff < 0) diff = 0;
+    const now = new Date();
+    let diff = Math.max(0, (target - now) / 1000);
     
     const vals = [
       Math.floor(diff / 86400),
-      Math.floor(diff % 86400 / 3600),
+      Math.floor(diff % 86400 / 3600), 
       Math.floor(diff % 3600 / 60),
       Math.floor(diff % 60)
     ];
     
-    console.log('Time values:', vals);
-    console.log('Current time:', new Date().toLocaleString());
-    console.log('Target time:', target.toLocaleString());
-    console.log('Seconds until target:', diff);
+    console.log('Countdown update:', {
+      now: now.toLocaleString(),
+      target: target.toLocaleString(), 
+      diff: diff,
+      values: vals
+    });
     
     digits.forEach((el, i) => {
       if (el && vals[i] !== undefined) {
         const newValue = vals[i].toString().padStart(2, "0");
-        console.log(`Setting digit ${i} from "${el.textContent}" to "${newValue}"`);
-        el.textContent = newValue;
+        if (el.textContent !== newValue) {
+          console.log(`Digit ${i}: ${el.textContent} → ${newValue}`);
+          el.textContent = newValue;
+        }
       }
     });
   };
 
-  // Initial update and start interval
   update();
   setInterval(update, 1000);
-  
-}, 500); // Wait 500ms for banner to be inserted
+  return true;
+}
+
+// Try immediately
+if (initCountdown()) {
+  console.log('Countdown initialized immediately');
+} else {
+  // Wait for DOM/banner
+  setTimeout(() => {
+    if (initCountdown()) {
+      console.log('Countdown initialized after delay');
+    } else {
+      console.error('Countdown failed to initialize');
+    }
+  }, 1000);
+}
 </script>
