@@ -24,36 +24,50 @@
 </div>
 
 <script>
-const target = new Date("2025-12-16T13:00:00-05:00");
+// Wait for the banner to be added to the DOM
+setTimeout(() => {
+  const target = new Date("2025-12-16T13:00:00-05:00");
 
-// Simple, direct selector for countdown numbers
-const digits = document.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
+  // Find countdown elements within the banner
+  const banner = document.querySelector('.pencilbox-banner');
+  if (!banner) {
+    console.error('Banner not found!');
+    return;
+  }
 
-console.log('Found digits:', digits.length, digits); // Debug log
-
-const update = () => {
-  let diff = (target - new Date()) / 1000;
-  if (diff < 0) diff = 0;
-  const vals = [
-    Math.floor(diff / 86400),
-    Math.floor(diff % 86400 / 3600),
-    Math.floor(diff % 3600 / 60),
-    Math.floor(diff % 60)
-  ];
+  const digits = banner.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
   
-  console.log('Time values:', vals); // Debug log
-  console.log('Current time:', new Date().toLocaleString());
-  console.log('Target time:', target.toLocaleString());
-  
-  digits.forEach((el, i) => {
-    if (el && vals[i] !== undefined) {
-      console.log(`Setting digit ${i} to:`, vals[i]);
-      el.textContent = vals[i].toString().padStart(2, "0");
-    }
-  });
-};
+  console.log('Banner found:', banner);
+  console.log('Found digits:', digits.length, digits);
 
-// Initial update and start interval
-update();
-setInterval(update, 1000);
+  const update = () => {
+    let diff = (target - new Date()) / 1000;
+    if (diff < 0) diff = 0;
+    
+    const vals = [
+      Math.floor(diff / 86400),
+      Math.floor(diff % 86400 / 3600),
+      Math.floor(diff % 3600 / 60),
+      Math.floor(diff % 60)
+    ];
+    
+    console.log('Time values:', vals);
+    console.log('Current time:', new Date().toLocaleString());
+    console.log('Target time:', target.toLocaleString());
+    console.log('Seconds until target:', diff);
+    
+    digits.forEach((el, i) => {
+      if (el && vals[i] !== undefined) {
+        const newValue = vals[i].toString().padStart(2, "0");
+        console.log(`Setting digit ${i} from "${el.textContent}" to "${newValue}"`);
+        el.textContent = newValue;
+      }
+    });
+  };
+
+  // Initial update and start interval
+  update();
+  setInterval(update, 1000);
+  
+}, 500); // Wait 500ms for banner to be inserted
 </script>
