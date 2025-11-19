@@ -1,0 +1,43 @@
+/* Pencilbox Banner System Styles */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* Banner container */
+.pencilbox-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 9999;
+  transform: translateY(100%);
+  transition: transform 0.4s ease;
+}
+
+/* Show banner animation */
+.pencilbox-banner.show {
+  transform: translateY(0);
+}
+
+/* Close button */
+.banner-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.banner-close:hover {
+  opacity: 1;
+}
+
+/* Additional banner content styles will be inherited from banner HTML */

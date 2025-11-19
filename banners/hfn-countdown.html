@@ -1,0 +1,43 @@
+<div style="background:rgba(255, 255, 255, 0.1);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);color:#fff;padding:8px 0;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,0.5);">
+  <div style="font-size:14px;font-weight:500;color:#fff;">A360 webinar in</div>
+  <div style="display:flex;gap:12px;align-items:center;">
+    <div style="text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">days</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">hrs</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">min</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">sec</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const target = new Date("2025-12-16T13:00:00-05:00");
+const digits = document.querySelectorAll('div[style*="font-size:18px"]');
+
+const update = () => {
+  let diff = (target - new Date()) / 1000;
+  if (diff < 0) diff = 0;
+  const vals = [
+    Math.floor(diff / 86400),
+    Math.floor(diff % 86400 / 3600),
+    Math.floor(diff % 3600 / 60),
+    Math.floor(diff % 60)
+  ];
+  digits.forEach((el,i) => el.textContent = vals[i].toString().padStart(2,"0"));
+};
+update();
+setInterval(update,1000);
+</script>

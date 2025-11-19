@@ -1,0 +1,6 @@
+{
+  "default": null,
+  "clients": {
+    "hfn.pencilbox.work": "/banners/hfn-countdown.html"
+  }
+}
