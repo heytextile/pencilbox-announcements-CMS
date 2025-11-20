@@ -16,33 +16,53 @@
   fetch(baseUrl + "/banners.json")
     .then(response => response.json())
     .then(bannerConfig => {
-      // Get banner URL for current hostname or default
       const bannerUrl = bannerConfig.clients[hostname] || bannerConfig.default;
-      
       if (!bannerUrl) return;
       
       // Fetch banner HTML content
       fetch(baseUrl + bannerUrl)
         .then(response => response.text())
         .then(bannerHtml => {
-          // Create banner element
           const bannerElement = document.createElement("div");
           bannerElement.className = "pencilbox-banner";
-          bannerElement.innerHTML = bannerHtml + '<div class="banner-close">×</div>';
-          
-          // Add banner to page
+
+          // Parse HTML to extract scripts safely
+          const temp = document.createElement("div");
+          temp.innerHTML = bannerHtml;
+
+          // Remove all <script> tags from the HTML string
+          const cleanHtml = bannerHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+          const scripts = Array.from(temp.querySelectorAll("script"));
+
+          // Insert clean HTML + close button
+          bannerElement.innerHTML = cleanHtml + '<div class="banner-close">×</div>';
           document.body.appendChild(bannerElement);
-          
-          // Show banner with animation
+
+          // Show banner
           setTimeout(() => bannerElement.classList.add("show"), 100);
-          
-          // Handle close button
+
+          // Re-inject and execute any scripts that were in the banner
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement("script");
+            if (oldScript.src) {
+              newScript.src = oldScript.src;
+              newScript.async = false;
+            } else {
+              newScript.textContent = oldScript.textContent;
+            }
+            // Appending to bannerElement keeps scope local — safer
+            bannerElement.appendChild(newScript);
+          });
+
+          // Close button handler
           bannerElement.querySelector(".banner-close").onclick = () => {
             bannerElement.classList.remove("show");
             setTimeout(() => bannerElement.remove(), 500);
             localStorage.setItem(dismissKey, Date.now());
             setTimeout(() => localStorage.removeItem(dismissKey), 86400000 * config.dismissDays);
           };
-        });
-    });
+        })
+        .catch(err => console.error("Pencilbox banner load error:", err));
+    })
+    .catch(err => console.error("Pencilbox config load error:", err));
 })();
