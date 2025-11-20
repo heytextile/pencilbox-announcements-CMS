@@ -1,18 +1,29 @@
 {
-  "default": "/banners/thanksgiving-2025.html",
-  "defaultDismissDays": 3,
+  "default": {
+    "banner": "/banners/thanksgiving-2025.html",
+    "dismissDays": 0,
+    "startDate": "2025-11-20",
+    "endDate": "2025-11-28"
+  },
+  "defaultDismissDays": 7,
   "clients": {
     "hfn.pencilbox.work": {
       "banner": "/banners/hfn-countdown.html",
-      "dismissDays": 0
+      "dismissDays": 0,
+      "startDate": null,
+      "endDate": null
     },
     "cref.pencilbox.work": {
       "banner": "/banners/hfn-countdown.html",
-      "dismissDays": 0
+      "dismissDays": 0,
+      "startDate": null,
+      "endDate": null
     },
     "ndr.pencilbox.work": {
       "banner": "/banners/ndr-proposal.html",
-      "dismissDays": 7
+      "dismissDays": 0,
+      "startDate": null,
+      "endDate": null
     }
   }
 }

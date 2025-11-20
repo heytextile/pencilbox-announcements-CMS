@@ -20,6 +20,29 @@
       console.log("Banner config loaded:", bannerConfig);
       console.log("Current hostname:", hostname);
       
+      // Helper function to check if a banner is currently active based on dates
+      function isBannerActive(bannerObj) {
+        if (!bannerObj || typeof bannerObj !== 'object') return true; // Legacy support
+        
+        const now = new Date();
+        const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+        
+        // Check start date
+        if (bannerObj.startDate && bannerObj.startDate > today) {
+          console.log("Banner not yet started:", bannerObj.startDate, "vs", today);
+          return false;
+        }
+        
+        // Check end date (null means indefinite)
+        if (bannerObj.endDate && bannerObj.endDate < today) {
+          console.log("Banner has ended:", bannerObj.endDate, "vs", today);
+          return false;
+        }
+        
+        console.log("Banner is active");
+        return true;
+      }
+      
       // Handle both old (string) and new (object) client configurations
       const clientConfig = bannerConfig.clients[hostname];
       let bannerUrl, dismissDays;
@@ -27,20 +50,37 @@
       console.log("Client config for", hostname, ":", clientConfig);
       
       if (typeof clientConfig === 'string') {
-        // Old format: direct path string
+        // Old format: direct path string - always active
         bannerUrl = clientConfig;
         dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
         console.log("Using string client config:", bannerUrl);
       } else if (clientConfig && typeof clientConfig === 'object') {
-        // New format: object with banner and dismissDays
-        bannerUrl = clientConfig.banner;
-        dismissDays = clientConfig.dismissDays !== undefined ? clientConfig.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
-        console.log("Using object client config:", bannerUrl);
-      } else {
-        // No configuration found, try default
-        bannerUrl = bannerConfig.default;
-        dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
-        console.log("Using default config:", bannerUrl);
+        // New format: object with banner, dismissDays, and scheduling
+        if (isBannerActive(clientConfig)) {
+          bannerUrl = clientConfig.banner;
+          dismissDays = clientConfig.dismissDays !== undefined ? clientConfig.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
+          console.log("Using object client config:", bannerUrl);
+        } else {
+          console.log("Client banner not active, checking default");
+          // Fall through to check default banner
+        }
+      }
+      
+      // If no client config or client banner not active, try default
+      if (!bannerUrl && bannerConfig.default) {
+        if (typeof bannerConfig.default === 'string') {
+          // Old default format
+          bannerUrl = bannerConfig.default;
+          dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+          console.log("Using string default config:", bannerUrl);
+        } else if (typeof bannerConfig.default === 'object' && isBannerActive(bannerConfig.default)) {
+          // New default format with scheduling
+          bannerUrl = bannerConfig.default.banner;
+          dismissDays = bannerConfig.default.dismissDays !== undefined ? bannerConfig.default.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
+          console.log("Using object default config:", bannerUrl);
+        } else {
+          console.log("Default banner not active or not found");
+        }
       }
       
       console.log("Final banner URL:", bannerUrl, "Dismiss days:", dismissDays);
