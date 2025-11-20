@@ -28,19 +28,41 @@
 function initCountdown() {
   const target = new Date("2025-12-16T13:00:00-05:00");
   
-  // Try different selectors
-  let digits = document.querySelectorAll('.countdown-digit');
-  if (!digits.length) {
-    digits = document.querySelectorAll('div[style*="font-size:18px"][style*="font-weight:700"]');
-  }
+  // Wait for banner to be fully loaded in DOM
+  const findDigits = () => {
+    // Try different selectors more reliably
+    let digits = document.querySelectorAll('.pencilbox-banner .countdown-digit');
+    if (!digits.length) {
+      // More specific fallback selector
+      digits = document.querySelectorAll('.pencilbox-banner div[style*="font-size:18px"][style*="font-weight:700"]');
+    }
+    return digits;
+  };
+  
+  let digits = findDigits();
   
   console.log('Countdown init - found digits:', digits.length, digits);
   
   if (!digits.length) {
-    console.error('No countdown digits found!');
+    console.error('No countdown digits found! Retrying...');
+    // Try again in case banner isn't fully loaded
+    setTimeout(() => {
+      digits = findDigits();
+      if (digits.length) {
+        console.log('Found digits on retry:', digits.length);
+        startCountdown(digits, target);
+      } else {
+        console.error('Still no countdown digits found after retry');
+      }
+    }, 500);
     return false;
   }
 
+  startCountdown(digits, target);
+  return true;
+}
+
+function startCountdown(digits, target) {
   const update = () => {
     const now = new Date();
     let diff = Math.max(0, (target - now) / 1000);
@@ -71,21 +93,19 @@ function initCountdown() {
   };
 
   update();
-  setInterval(update, 1000);
-  return true;
+  const interval = setInterval(update, 1000);
+  console.log('Countdown timer started');
+  return interval;
 }
 
-// Try immediately
-if (initCountdown()) {
-  console.log('Countdown initialized immediately');
+// Try multiple initialization approaches
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCountdown);
 } else {
-  // Wait for DOM/banner
-  setTimeout(() => {
-    if (initCountdown()) {
-      console.log('Countdown initialized after delay');
-    } else {
-      console.error('Countdown failed to initialize');
-    }
-  }, 1000);
+  // DOM already loaded, try immediately
+  if (!initCountdown()) {
+    // Wait a bit more
+    setTimeout(initCountdown, 1000);
+  }
 }
 </script>

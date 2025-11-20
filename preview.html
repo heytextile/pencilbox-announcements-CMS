@@ -166,9 +166,9 @@
         </div>
     </div>
 
-    <!-- Load the actual banner system (minified versions) -->
-    <link rel="stylesheet" href="dist/banner.min.css">
-    <script src="dist/banner.min.js"></script>
+    <!-- Load the actual banner system (source versions for preview) -->
+    <link rel="stylesheet" href="src/banner.css">
+    <script src="src/banner-preview.js"></script>
     
     <script>
         let bannerConfig = {};
@@ -228,12 +228,19 @@
                 // Clear any existing banners first
                 clearBanner();
                 
+                // Set a flag for the banner system to recognize preview mode
+                window.PencilboxBannerConfig = { 
+                    dismissDays: 30, 
+                    previewMode: true,
+                    testHostname: hostname
+                };
+                
                 // Construct the full URL for debugging
                 const bannerUrl = '.' + bannerFile;
                 console.log('Fetching banner from:', bannerUrl);
                 
                 // Load the banner HTML
-                const response = await fetch(bannerUrl);
+                const response = await fetch(bannerUrl + '?t=' + Date.now());
                 console.log('Response status:', response.status, response.statusText);
                 
                 if (!response.ok) {
@@ -242,7 +249,7 @@
                 const bannerHtml = await response.text();
                 console.log('Banner HTML loaded, length:', bannerHtml.length);
                 
-                // Create and show banner
+                // Create and show banner manually for preview
                 createBanner(bannerHtml, bannerFile, hostname);
                 
             } catch (error) {
@@ -255,16 +262,48 @@
             // Create banner element
             const bannerElement = document.createElement("div");
             bannerElement.className = "pencilbox-banner";
-            bannerElement.innerHTML = bannerHtml + '<div class="banner-close">×</div>';
             
-            // Add banner to page
+            // Parse HTML to extract scripts safely
+            const temp = document.createElement("div");
+            temp.innerHTML = bannerHtml;
+            
+            // Remove all <script> tags from the HTML string
+            const cleanHtml = bannerHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+            const scripts = Array.from(temp.querySelectorAll("script"));
+            
+            console.log('Found scripts in banner:', scripts.length);
+            
+            // Insert clean HTML + close button
+            bannerElement.innerHTML = cleanHtml + '<div class="banner-close">×</div>';
             document.body.appendChild(bannerElement);
             
             // Show banner with animation
-            setTimeout(() => bannerElement.classList.add("show"), 100);
+            setTimeout(() => {
+                bannerElement.classList.add("show");
+                console.log('Banner shown');
+                
+                // Re-inject and execute any scripts that were in the banner
+                scripts.forEach((oldScript, index) => {
+                    console.log('Executing script', index + 1);
+                    try {
+                        const newScript = document.createElement("script");
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                            newScript.async = false;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        // Appending to bannerElement keeps scope local
+                        bannerElement.appendChild(newScript);
+                    } catch (e) {
+                        console.error('Error executing script', index + 1, ':', e);
+                    }
+                });
+            }, 100);
             
             // Handle close button
             bannerElement.querySelector(".banner-close").onclick = () => {
+                console.log('Banner close clicked');
                 bannerElement.classList.remove("show");
                 setTimeout(() => bannerElement.remove(), 500);
                 clearBannerInfo();
