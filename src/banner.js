@@ -17,25 +17,38 @@
   fetch(baseUrl + "/banners.json")
     .then(response => response.json())
     .then(bannerConfig => {
+      console.log("Banner config loaded:", bannerConfig);
+      console.log("Current hostname:", hostname);
+      
       // Handle both old (string) and new (object) client configurations
       const clientConfig = bannerConfig.clients[hostname];
       let bannerUrl, dismissDays;
+      
+      console.log("Client config for", hostname, ":", clientConfig);
       
       if (typeof clientConfig === 'string') {
         // Old format: direct path string
         bannerUrl = clientConfig;
         dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+        console.log("Using string client config:", bannerUrl);
       } else if (clientConfig && typeof clientConfig === 'object') {
         // New format: object with banner and dismissDays
         bannerUrl = clientConfig.banner;
         dismissDays = clientConfig.dismissDays !== undefined ? clientConfig.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
+        console.log("Using object client config:", bannerUrl);
       } else {
         // No configuration found, try default
         bannerUrl = bannerConfig.default;
         dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+        console.log("Using default config:", bannerUrl);
       }
       
-      if (!bannerUrl) return;
+      console.log("Final banner URL:", bannerUrl, "Dismiss days:", dismissDays);
+      
+      if (!bannerUrl) {
+        console.log("No banner URL found, exiting");
+        return;
+      }
       
       // If dismissDays is 0 or negative, disable dismissal entirely
       const dismissalEnabled = dismissDays > 0;

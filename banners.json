@@ -1,6 +1,6 @@
 {
-  "default": null,
-  "defaultDismissDays": 7,
+  "default": "/banners/thanksgiving-2025.html",
+  "defaultDismissDays": 3,
   "clients": {
     "hfn.pencilbox.work": {
       "banner": "/banners/hfn-countdown.html",
