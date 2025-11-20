@@ -16,8 +16,8 @@ The banner system automatically:
 Add these two lines to any website to enable banners:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.css">
-<script src="https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/src/banner.css">
+<script src="https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/src/banner.js"></script>
 ```
 
 ### Optional Configuration
@@ -32,16 +32,13 @@ window.PencilboxBannerConfig = {
 ## Project Structure
 
 ```
-├── src/                    # Source files
+├── src/                   # Source files (served via CDN)
 │   ├── banner.css         # Banner styles
 │   └── banner.js          # Banner functionality
-├── dist/                  # Built/minified files (served via CDN)
-│   ├── banner.min.css     # Minified styles
-│   └── banner.min.js      # Minified JavaScript
 ├── banners/               # Banner HTML templates
 │   └── hfn-countdown.html # Example: Countdown banner
 ├── banners.json           # Client-to-banner mapping
-└── package.json           # Build configuration
+└── package.json           # Project configuration
 ```
 
 ## Adding a New Client Banner
@@ -62,44 +59,21 @@ Example `banners.json` entry:
 ## Development & Deployment
 
 ### Prerequisites
-- Node.js installed locally
+- Node.js installed locally (for preview server only)
 
-### 🚀 Clean Development Workflow
+### 🚀 Simple Deployment Workflow
 
 #### 1. Make Changes
-Edit your source files:
+Edit your files:
 - `src/banner.css` - Banner styles
 - `src/banner.js` - Banner functionality  
 - `banners.json` - Client configuration
 - `banners/*.html` - Banner templates
 
-#### 2. Build Everything
-```bash
-npm run build
-```
-This single command:
-- ✅ Minifies `src/banner.css` → `dist/banner.min.css`
-- ✅ Minifies `src/banner.js` → `dist/banner.min.js`
-- ✅ Prepares all files for CDN deployment
-
-#### 3. Commit & Deploy
-1. **Commit all changes** via GitHub Desktop:
-   - Source files (`src/`, `banners.json`, `banners/`)
-   - **Built files** (`dist/banner.min.css`, `dist/banner.min.js`)
+#### 2. Commit & Deploy
+1. **Commit all changes** via GitHub Desktop
 2. **Push to GitHub**
-3. **Wait 2-3 minutes** for CDN update
-
-#### 4. CDN Cache Management
-If changes don't appear immediately, purge the CDN cache:
-- Config: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/banners.json`
-- JavaScript: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.js`
-- CSS: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.css`
-
-### Individual Build Commands
-```bash
-npm run build:css    # CSS only
-npm run build:js     # JavaScript only
-```
+3. **Done!** - Changes are live immediately via CDN
 
 ### Local Development
 ```bash
@@ -107,10 +81,11 @@ npm run dev          # Start local server on :8080
 ```
 Then visit `http://localhost:8080/preview.html` to test banners locally.
 
-### ⚠️ Important Notes
-- **Always run `npm run build` before committing**
-- **Never commit without building** - the `dist/` files are what get served
-- **JSDelivr caching can take up to 12 hours** - use purge URLs for immediate updates
+### ✅ Benefits of This Approach
+- **No build step** - What you see is what you get
+- **Immediate deployment** - Commit and go live
+- **Easy debugging** - Readable source code
+- **No cache issues** - Direct source files
 
 ### Banner HTML Guidelines
 

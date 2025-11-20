@@ -2,7 +2,7 @@
   "name": "pencilbox-announcements-cms",
   "version": "1.0.0",
   "description": "CDN-powered per-client banner engine",
-  "main": "dist/banner.min.js",
+  "main": "src/banner.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/heytextile/pencilbox-announcements-cms.git"
@@ -23,7 +23,7 @@
     "terser": "^5.24.0"
   },
   "files": [
-    "dist/",
+    "src/",
     "banners.json",
     "banners/"
   ]

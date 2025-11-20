@@ -1,7 +1,8 @@
-// Pencilbox Banner System
+// Pencilbox Banner System - with updated object handling logic
 (function() {
   "use strict";
   
+  const VERSION = "1.2.0"; // Force rebuild for CDN
   const hostname = location.hostname;
   const dismissKey = "pb-dismiss-" + hostname;
   
