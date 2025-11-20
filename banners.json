@@ -4,7 +4,11 @@
   "clients": {
     "hfn.pencilbox.work": {
       "banner": "/banners/hfn-countdown.html",
-      "dismissDays": 1
+      "dismissDays": 0
+    },
+    "hfn.pencilbox.work": {
+      "banner": "/banners/hfn-countdown.html",
+      "dismissDays": 0
     }
   }
 }
