@@ -1,0 +1,74 @@
+<div style="color:#fff;display:flex;align-items:center;justify-content:center;gap:30px;font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;padding:15px 20px;text-shadow:0 1px 2px rgba(0,0,0,0.3);">
+  <div style="font-size:16px;font-weight:500;color:#fff;">
+    Here's our custom proposal for you
+  </div>
+  <button onclick="window.open('http://quotes.heytextile.com/National-Debt-Relief-Social-Media-Hqgo7nvQTCa0', '_blank')" class="announcement-bar_btn glowring" style="
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+  ">
+    View Estimate
+  </button>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* Glowring Button Styles */
+.announcement-bar_btn.glowring {
+  color: #fff;
+  background: #111;
+}
+
+.announcement-bar_btn.glowring:before {
+  content: '';
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left:-2px;
+  background-size: 200%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+}
+
+.announcement-bar_btn.glowring:active {
+  color: #000
+}
+
+.announcement-bar_btn.glowring:active:after {
+  background: transparent;
+}
+
+.announcement-bar_btn.glowring:hover:before {
+  opacity: 1;
+}
+
+.announcement-bar_btn.glowring:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+</style>

@@ -59,24 +59,58 @@ Example `banners.json` entry:
 }
 ```
 
-## Development
+## Development & Deployment
 
 ### Prerequisites
 - Node.js installed locally
 
-### Building the Project
+### 🚀 Clean Development Workflow
 
+#### 1. Make Changes
+Edit your source files:
+- `src/banner.css` - Banner styles
+- `src/banner.js` - Banner functionality  
+- `banners.json` - Client configuration
+- `banners/*.html` - Banner templates
+
+#### 2. Build Everything
 ```bash
-# Install dependencies
-npm install
-
-# Build minified files
 npm run build
+```
+This single command:
+- ✅ Minifies `src/banner.css` → `dist/banner.min.css`
+- ✅ Minifies `src/banner.js` → `dist/banner.min.js`
+- ✅ Prepares all files for CDN deployment
 
-# Build individual files
+#### 3. Commit & Deploy
+1. **Commit all changes** via GitHub Desktop:
+   - Source files (`src/`, `banners.json`, `banners/`)
+   - **Built files** (`dist/banner.min.css`, `dist/banner.min.js`)
+2. **Push to GitHub**
+3. **Wait 2-3 minutes** for CDN update
+
+#### 4. CDN Cache Management
+If changes don't appear immediately, purge the CDN cache:
+- Config: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/banners.json`
+- JavaScript: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.js`
+- CSS: `https://purge.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest/dist/banner.min.css`
+
+### Individual Build Commands
+```bash
 npm run build:css    # CSS only
 npm run build:js     # JavaScript only
 ```
+
+### Local Development
+```bash
+npm run dev          # Start local server on :8080
+```
+Then visit `http://localhost:8080/preview.html` to test banners locally.
+
+### ⚠️ Important Notes
+- **Always run `npm run build` before committing**
+- **Never commit without building** - the `dist/` files are what get served
+- **JSDelivr caching can take up to 12 hours** - use purge URLs for immediate updates
 
 ### Banner HTML Guidelines
 

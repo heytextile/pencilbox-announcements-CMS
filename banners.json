@@ -9,6 +9,10 @@
     "cref.pencilbox.work": {
       "banner": "/banners/hfn-countdown.html",
       "dismissDays": 0
+    },
+    "ndr.pencilbox.work": {
+      "banner": "/banners/ndr-proposal.html",
+      "dismissDays": 7
     }
   }
 }
