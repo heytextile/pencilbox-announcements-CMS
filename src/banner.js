@@ -9,15 +9,35 @@
   if (localStorage.getItem(dismissKey)) return;
   
   // Get configuration or use defaults
-  const config = window.PencilboxBannerConfig || { dismissDays: 30 };
+  const config = window.PencilboxBannerConfig || { dismissDays: 7 };
   const baseUrl = "https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest";
   
   // Fetch banner configuration
   fetch(baseUrl + "/banners.json")
     .then(response => response.json())
     .then(bannerConfig => {
-      const bannerUrl = bannerConfig.clients[hostname] || bannerConfig.default;
+      // Handle both old (string) and new (object) client configurations
+      const clientConfig = bannerConfig.clients[hostname];
+      let bannerUrl, dismissDays;
+      
+      if (typeof clientConfig === 'string') {
+        // Old format: direct path string
+        bannerUrl = clientConfig;
+        dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+      } else if (clientConfig && typeof clientConfig === 'object') {
+        // New format: object with banner and dismissDays
+        bannerUrl = clientConfig.banner;
+        dismissDays = clientConfig.dismissDays !== undefined ? clientConfig.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
+      } else {
+        // No configuration found, try default
+        bannerUrl = bannerConfig.default;
+        dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+      }
+      
       if (!bannerUrl) return;
+      
+      // If dismissDays is 0 or negative, disable dismissal entirely
+      const dismissalEnabled = dismissDays > 0;
       
       // Fetch banner HTML content
       fetch(baseUrl + bannerUrl)
@@ -58,8 +78,12 @@
           bannerElement.querySelector(".banner-close").onclick = () => {
             bannerElement.classList.remove("show");
             setTimeout(() => bannerElement.remove(), 500);
-            localStorage.setItem(dismissKey, Date.now());
-            setTimeout(() => localStorage.removeItem(dismissKey), 86400000 * config.dismissDays);
+            
+            // Only set dismissal if enabled (dismissDays > 0)
+            if (dismissalEnabled) {
+              localStorage.setItem(dismissKey, Date.now());
+              setTimeout(() => localStorage.removeItem(dismissKey), 86400000 * dismissDays);
+            }
           };
         })
         .catch(err => console.error("Pencilbox banner load error:", err));

@@ -1,6 +1,10 @@
 {
   "default": null,
+  "defaultDismissDays": 7,
   "clients": {
-    "hfn.pencilbox.work": "/banners/hfn-countdown.html"
+    "hfn.pencilbox.work": {
+      "banner": "/banners/hfn-countdown.html",
+      "dismissDays": 1
+    }
   }
 }

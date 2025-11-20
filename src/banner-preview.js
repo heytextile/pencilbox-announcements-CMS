@@ -9,7 +9,7 @@
   );
   
   // Check for test hostname override
-  const config = window.PencilboxBannerConfig || { dismissDays: 30 };
+  const config = window.PencilboxBannerConfig || { dismissDays: 7 };
   const hostname = config.testHostname || location.hostname;
   const dismissKey = "pb-dismiss-" + hostname;
   
@@ -33,13 +33,35 @@
     })
     .then(bannerConfig => {
       console.log('Banner config loaded:', bannerConfig);
-      const bannerUrl = bannerConfig.clients[hostname] || bannerConfig.default;
+      
+      // Handle both old (string) and new (object) client configurations
+      const clientConfig = bannerConfig.clients[hostname];
+      let bannerUrl, dismissDays;
+      
+      if (typeof clientConfig === 'string') {
+        // Old format: direct path string
+        bannerUrl = clientConfig;
+        dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+      } else if (clientConfig && typeof clientConfig === 'object') {
+        // New format: object with banner and dismissDays
+        bannerUrl = clientConfig.banner;
+        dismissDays = clientConfig.dismissDays !== undefined ? clientConfig.dismissDays : (bannerConfig.defaultDismissDays || config.dismissDays);
+      } else {
+        // No configuration found, try default
+        bannerUrl = bannerConfig.default;
+        dismissDays = bannerConfig.defaultDismissDays || config.dismissDays;
+      }
+      
       console.log('Banner URL for', hostname, ':', bannerUrl);
+      console.log('Dismiss days for', hostname, ':', dismissDays);
       
       if (!bannerUrl) {
         console.log('No banner configured for hostname:', hostname);
         return;
       }
+      
+      // If dismissDays is 0 or negative, disable dismissal entirely
+      const dismissalEnabled = dismissDays > 0;
       
       // Fetch banner HTML content
       const fullBannerUrl = baseUrl + bannerUrl + (isPreview ? '?t=' + Date.now() : '');
@@ -94,9 +116,11 @@
             console.log('Banner close clicked');
             bannerElement.classList.remove("show");
             setTimeout(() => bannerElement.remove(), 500);
-            if (!isPreview) {
+            
+            // Only set dismissal if enabled and not in preview mode
+            if (!isPreview && dismissalEnabled) {
               localStorage.setItem(dismissKey, Date.now());
-              setTimeout(() => localStorage.removeItem(dismissKey), 86400000 * config.dismissDays);
+              setTimeout(() => localStorage.removeItem(dismissKey), 86400000 * dismissDays);
             }
           };
         })
