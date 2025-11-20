@@ -11,7 +11,7 @@
   
   // Get configuration or use defaults
   const config = window.PencilboxBannerConfig || { dismissDays: 7 };
-  const baseUrl = "https://cdn.jsdelivr.net/gh/heytextile/pencilbox-announcements-cms@latest";
+  const baseUrl = "https://pencilbox-announcements-cms.vercel.app";
   
   // Fetch banner configuration
   fetch(baseUrl + "/banners.json")
