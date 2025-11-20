@@ -12,9 +12,6 @@
   "homepage": "https://github.com/heytextile/pencilbox-announcements-cms#readme",
   "keywords": ["banner", "cdn", "announcements", "pencilbox", "javascript", "css"],
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
-    "build:css": "cleancss -o dist/banner.min.css src/banner.css",
-    "build:js": "terser src/banner.js -o dist/banner.min.js -c -m",
     "dev": "python3 -m http.server 8080 || python -m SimpleHTTPServer 8080",
     "preview": "npm run dev"
   },
