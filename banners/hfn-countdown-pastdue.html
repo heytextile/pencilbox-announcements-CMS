@@ -1,0 +1,217 @@
+<!-- HFN Countdown + Past Due – Perfect translateY version -->
+
+<!-- Past Due Banner: Separate div above countdown -->
+<div id="pastdue-banner" style="
+  height: 32px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-direction: column !important;
+  transition: all 0.6s ease-out !important;
+  padding: 8px 20px;
+  box-sizing: border-box;
+">
+  <div style="text-align:center; white-space: nowrap;">
+    Your Textile invoices are past due. To avoid work interruptions and fees, review statements and send payment. Thank you.
+  </div>
+</div>
+
+
+
+<!-- Countdown Banner: Separate div, exact copy of original -->
+<div id="countdown-banner" style="color:#fff;display:flex;align-items:center;justify-content:center;gap:20px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,0.5);padding:8px 0;">
+  <div style="font-size:14px;font-weight:500;color:#fff;">A360 webinar in</div>
+  <div style="display:flex;gap:12px;align-items:center;">
+    <div style="text-align:center;">
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">days</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">hrs</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">min</div>
+    </div>
+    <div style="color:#fff;font-weight:300;opacity:0.7;">•</div>
+    <div style="text-align:center;">
+      <div class="countdown-digit" style="font-size:18px;font-weight:700;color:#fff;">00</div>
+      <div style="font-size:10px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;opacity:0.9;">sec</div>
+    </div>
+  </div>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* Let the main banner container behave naturally */
+.pencilbox-banner {
+  padding: 0 !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  /* Start positioned up by total height: countdown(53px) + pastdue(48px) = 101px */
+  transform: translateY(-101px);
+  transition: transform 0.6s ease-out;
+}
+
+/* Both banners maintain their normal styling */
+#countdown-banner {
+  padding: 0;
+}
+
+#pastdue-banner {
+  height: 32px;
+  padding: 8px 0px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stage 1: Move down by countdown height to show past due banner */
+.pencilbox-banner.stage1 {
+  transform: translateY(-48px); /* Only past due height (48px) left to hide countdown */
+}
+
+/* Stage 2: Move down by past due height to show both banners */
+.pencilbox-banner.stage2 {
+  transform: translateY(0);
+}
+</style>
+
+<script>
+// Enhanced countdown initialization
+function initCountdown() {
+  const target = new Date("2025-12-16T13:00:00-05:00");
+  
+  const findDigits = () => {
+    let digits = document.querySelectorAll('.pencilbox-banner .countdown-digit');
+    if (!digits.length) {
+      digits = document.querySelectorAll('.pencilbox-banner div[style*="font-size:18px"][style*="font-weight:700"]');
+    }
+    return digits;
+  };
+  
+  let digits = findDigits();
+  
+  console.log('Countdown init - found digits:', digits.length, digits);
+  
+  if (!digits.length) {
+    console.error('No countdown digits found! Retrying...');
+    setTimeout(() => {
+      digits = findDigits();
+      if (digits.length) {
+        console.log('Found digits on retry:', digits.length);
+        startCountdown(digits, target);
+      } else {
+        console.error('Still no countdown digits found after retry');
+      }
+    }, 500);
+    return false;
+  }
+
+  startCountdown(digits, target);
+  return true;
+}
+
+function startCountdown(digits, target) {
+  const update = () => {
+    const now = new Date();
+    let diff = Math.max(0, (target - now) / 1000);
+    
+    const vals = [
+      Math.floor(diff / 86400),
+      Math.floor(diff % 86400 / 3600), 
+      Math.floor(diff % 3600 / 60),
+      Math.floor(diff % 60)
+    ];
+    
+    console.log('Countdown update:', {
+      now: now.toLocaleString(),
+      target: target.toLocaleString(), 
+      diff: diff,
+      values: vals
+    });
+    
+    digits.forEach((el, i) => {
+      if (el && vals[i] !== undefined) {
+        const newValue = vals[i].toString().padStart(2, "0");
+        if (el.textContent !== newValue) {
+          console.log(`Digit ${i}: ${el.textContent} → ${newValue}`);
+          el.textContent = newValue;
+        }
+      }
+    });
+  };
+
+  update();
+  const interval = setInterval(update, 1000);
+  console.log('Countdown timer started');
+  return interval;
+}
+
+// Simple staged animation with hardcoded heights
+function startStagedAnimation() {
+  const container = document.querySelector('.pencilbox-banner');
+  
+  console.log('startStagedAnimation called');
+  
+  if (!container) {
+    console.error('Banner container not found');
+    return;
+  }
+  
+  console.log('Starting staged animation with hardcoded heights');
+  
+  // Stage 1: Show past due banner (move down by countdown height ~53px)
+  setTimeout(() => {
+    console.log('Stage 1: Moving down by countdown height to show past due banner');
+    container.classList.add('stage1');
+  }, 100);
+  
+  // Stage 2: Show both banners (move down by past due height 48px) - delayed by 3 seconds
+  setTimeout(() => {
+    console.log('Stage 2: Moving down by past due height to show both banners');
+    container.classList.remove('stage1');
+    container.classList.add('stage2');
+  }, 3100); // Was 2100, now 3100 (added another second)
+}
+
+// Initialize everything
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initCountdown();
+    // Start the staged animation sequence
+    startStagedAnimation();
+  });
+} else {
+  if (!initCountdown()) {
+    setTimeout(initCountdown, 1000);
+  }
+  // Start the staged animation sequence
+  startStagedAnimation();
+}
+</script>

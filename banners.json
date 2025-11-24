@@ -8,13 +8,13 @@
   "defaultDismissDays": 7,
   "clients": {
     "hfn.pencilbox.work": {
-      "banner": "/banners/hfn-countdown.html",
+      "banner": "/banners/hfn-countdown-pastdue.html",
       "dismissDays": 0,
       "startDate": null,
       "endDate": null
     },
     "cref.pencilbox.work": {
-      "banner": "/banners/hfn-countdown.html",
+      "banner": "/banners/hfn-countdown-pastdue.html",
       "dismissDays": 0,
       "startDate": null,
       "endDate": null

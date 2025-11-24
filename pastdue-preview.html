@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Due Banner Preview</title>
+    <link rel="stylesheet" href="src/banner.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+        }
+        .demo-content {
+            max-width: 800px;
+            margin: 60px auto 0;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .banner-preview {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .preview-label {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-content">
+        <h1>Past Due Invoice Banner Preview</h1>
+        <p>This shows how the 32px past due banner will look:</p>
+        
+        <div class="banner-preview">
+            <div class="preview-label">Past Due Banner (32px height)</div>
+            <div id="pastdue-banner-container"></div>
+        </div>
+        
+        <p><strong>Specifications:</strong></p>
+        <ul>
+            <li>Height: 32px (compact)</li>
+            <li>Background: Muted red (#C53030)</li>
+            <li>Text: Professional white with shadow</li>
+            <li>Font: 14px Inter for readability at small size</li>
+        </ul>
+        
+        <p><strong>Next steps:</strong></p>
+        <ul>
+            <li>Review appearance and readability</li>
+            <li>Add animation for smooth presentation</li>
+            <li>Attach to bottom of existing HFN/CREF banners</li>
+        </ul>
+        
+        <button onclick="loadBanner()">Load Banner</button>
+        <button onclick="removeBanner()">Remove Banner</button>
+    </div>
+
+    <script>
+        function loadBanner() {
+            // Clear any existing banners
+            removeBanner();
+            
+            // Load the past due banner content
+            fetch('banners/pastdue-invoice.html')
+                .then(response => response.text())
+                .then(bannerHtml => {
+                    console.log('Past due banner HTML loaded');
+                    
+                    const container = document.getElementById('pastdue-banner-container');
+                    const bannerElement = document.createElement("div");
+                    bannerElement.className = "pencilbox-banner";
+
+                    // Parse HTML to extract scripts safely
+                    const temp = document.createElement("div");
+                    temp.innerHTML = bannerHtml;
+
+                    // Remove all <script> tags from the HTML string
+                    const cleanHtml = bannerHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+                    const scripts = Array.from(temp.querySelectorAll("script"));
+
+                    // Insert clean HTML + close button for demo
+                    bannerElement.innerHTML = cleanHtml + '<div class="banner-close" style="position:absolute;top:8px;right:15px;font-size:16px;cursor:pointer;opacity:0.7;">×</div>';
+                    container.appendChild(bannerElement);
+
+                    // Animate banner appearance like the real system
+                    setTimeout(() => bannerElement.classList.add("show"), 100);
+
+                    // Re-inject and execute any scripts that were in the banner
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement("script");
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                            newScript.async = false;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        bannerElement.appendChild(newScript);
+                    });
+
+                    // Close button handler
+                    bannerElement.querySelector(".banner-close").onclick = () => {
+                        bannerElement.remove();
+                    };
+                })
+                .catch(err => {
+                    console.error("Banner load error:", err);
+                    alert('Error loading banner: ' + err.message);
+                });
+        }
+        
+        function removeBanner() {
+            const container = document.getElementById('pastdue-banner-container');
+            container.innerHTML = '';
+        }
+        
+        // Auto-load on page load
+        setTimeout(loadBanner, 1000);
+    </script>
+</body>
+</html>
