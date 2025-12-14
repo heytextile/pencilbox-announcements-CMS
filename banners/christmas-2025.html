@@ -102,16 +102,17 @@
       logoLayer.appendChild(el);
       // Assign a random release time within the animation duration
       const delay = randomInRange(0, duration - 2000); // leave a little time for the flake to fall
+      // Limit X and Y rotation to ±40deg, Z can be full 360
       logoFlakes.push({
         el,
         x: parseFloat(el.style.left),
         y: parseFloat(el.style.top),
         speed: randomInRange(1.2, 1.7),
-        rotX: Math.random() * 360,
-        rotY: Math.random() * 360,
+        rotX: randomInRange(-40, 40),
+        rotY: randomInRange(-40, 40),
         rotZ: Math.random() * 360,
-        rotXSpeed: randomInRange(1, 3) * (Math.random() < 0.5 ? 1 : -1),
-        rotYSpeed: randomInRange(1, 3) * (Math.random() < 0.5 ? 1 : -1),
+        rotXSpeed: randomInRange(0.2, 0.7) * (Math.random() < 0.5 ? 1 : -1),
+        rotYSpeed: randomInRange(0.2, 0.7) * (Math.random() < 0.5 ? 1 : -1),
         rotZSpeed: randomInRange(1, 3) * (Math.random() < 0.5 ? 1 : -1),
         delay,
         released: false
@@ -130,8 +131,13 @@
           }
         }
         flake.y += flake.speed;
+        // X and Y axis rotation limited to ±40deg
         flake.rotX += flake.rotXSpeed;
         flake.rotY += flake.rotYSpeed;
+        if (flake.rotX > 40) flake.rotX = 40;
+        if (flake.rotX < -40) flake.rotX = -40;
+        if (flake.rotY > 40) flake.rotY = 40;
+        if (flake.rotY < -40) flake.rotY = -40;
         flake.rotZ += flake.rotZSpeed;
         flake.el.style.top = `${flake.y}px`;
         flake.el.style.transform = `rotateX(${flake.rotX}deg) rotateY(${flake.rotY}deg) rotateZ(${flake.rotZ}deg)`;
