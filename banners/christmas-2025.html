@@ -86,6 +86,7 @@
     const logoSVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 415.63 666' width='32' height='51'><g><path fill='#fff' d='M300.45,655.99c-40.06,0-60.09-34.06-60.09-102.15V150.23h175.26v-10.02h-175.26V0h-100.16c0,93.48-32.04,140.21-96.14,140.21H0v10.02c53.41,0,80.12,23.38,80.12,70.1v195.3c0,166.92,73.44,250.37,220.34,250.37,26.22,0,47.78-6.27,64.69-18.82l-6.61-7.88c-15.3,11.12-34.66,16.69-58.09,16.69'/></g></svg>`;
     const logoCount = 8;
     const logoFlakes = [];
+    const logoDelays = [];
     for (let i = 0; i < logoCount; i++) {
       const div = document.createElement('div');
       div.innerHTML = logoSVG;
@@ -96,12 +97,24 @@
       el.style.pointerEvents = 'none';
       el.style.opacity = '0.85';
       el.style.transition = 'none';
+      el.style.visibility = 'hidden'; // Hide until released
       logoLayer.appendChild(el);
-      logoFlakes.push({el, x: parseFloat(el.style.left), y: parseFloat(el.style.top), speed: randomInRange(1.2, 1.7), rot: Math.random() * 360, rotSpeed: randomInRange(1, 3) * (Math.random() < 0.5 ? 1 : -1)});
+      // Assign a random release time within the animation duration
+      const delay = randomInRange(0, duration - 2000); // leave a little time for the flake to fall
+      logoFlakes.push({el, x: parseFloat(el.style.left), y: parseFloat(el.style.top), speed: randomInRange(1.2, 1.7), rot: Math.random() * 360, rotSpeed: randomInRange(1, 3) * (Math.random() < 0.5 ? 1 : -1), delay, released: false});
     }
 
     function animateLogos() {
+      const now = Date.now();
       for (const flake of logoFlakes) {
+        if (!flake.released) {
+          if (now >= animationEnd - duration + flake.delay) {
+            flake.released = true;
+            flake.el.style.visibility = 'visible';
+          } else {
+            continue; // Not released yet
+          }
+        }
         flake.y += flake.speed;
         flake.rot += flake.rotSpeed;
         flake.el.style.top = `${flake.y}px`;
@@ -113,7 +126,7 @@
           flake.el.style.left = `${flake.x}%`;
         }
       }
-      if (Date.now() < animationEnd) {
+      if (now < animationEnd) {
         requestAnimationFrame(animateLogos);
       }
     }
