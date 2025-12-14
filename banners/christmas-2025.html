@@ -1,74 +1,97 @@
-<!-- Merry Christmas Banner with Custom Snow Animation -->
-<div class="pencilbox-banner christmas-banner" style="position:relative;z-index:1000;">
-  <canvas id="snow-canvas" style="position:absolute;top:0;left:0;width:100vw;height:100%;pointer-events:none;z-index:1;"></canvas>
-  <div style="position:relative;z-index:2;padding:18px 0 18px 0;text-align:center;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:20px;font-weight:700;color:#fff;background:linear-gradient(90deg,#b91c1c 0%,#15803d 100%);box-shadow:0 2px 8px rgba(0,0,0,0.15);letter-spacing:0.5px;text-shadow:0 2px 8px #0008,0 1px 0 #fff2;">
-    🎄 Merry Christmas from Textile! 🎄
+<!-- Christmas 2025 Banner - Generic for Multiple Subdomains -->
+
+<div id="thanksgiving-banner-content" style="color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;padding:12px 20px;text-shadow:0 0 3px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.2);position:relative;z-index:1000000;background:#C41E3A;">
+  <div style="font-size:18px;font-weight:700;color:#FFFFFF;text-align:center;">
+    🎄 Merry Christmas from Textile! 🎅
   </div>
 </div>
 
-<!-- Canvas Confetti Library -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-<script>
-(function() {
-  var duration = 15 * 1000;
-  var animationEnd = Date.now() + duration;
-  var skew = 1;
-  var canvas = document.getElementById('snow-canvas');
-  if (!canvas) return;
-  // Make canvas fill the banner
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = canvas.parentElement.offsetHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  function randomInRange(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  (function frame() {
-    var timeLeft = animationEnd - Date.now();
-    var ticks = Math.max(200, 500 * (timeLeft / duration));
-    skew = Math.max(0.8, skew - 0.001);
-    confetti({
-      particleCount: 1,
-      startVelocity: 0,
-      ticks: ticks,
-      origin: {
-        x: Math.random(),
-        y: (Math.random() * skew) - 0.2
-      },
-      colors: ['#ffffff'],
-      shapes: ['circle'],
-      gravity: randomInRange(0.4, 0.6),
-      scalar: randomInRange(0.4, 1),
-      drift: randomInRange(-0.4, 0.4),
-      zIndex: 2,
-      disableForReducedMotion: true,
-      // Use the custom canvas
-      resize: true,
-      useWorker: true,
-      canvas: canvas
-    });
-    if (timeLeft > 0) {
-      requestAnimationFrame(frame);
-    }
-  })();
-})();
-</script>
-<style>
-.christmas-banner {
+<!-- Fullscreen overlay for the animation -->
+<div id="thanksgiving-overlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  position: relative;
+  height: 100vh;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  background: linear-gradient(135deg, rgba(0, 100, 0, 0.1) 0%, rgba(139, 0, 0, 0.1) 50%, rgba(255, 215, 0, 0.08) 100%);
   overflow: hidden;
-  min-height: 64px;
+">
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.pencilbox-banner {
+  padding: 4px 0 !important;
 }
-@media (max-width: 600px) {
-  .christmas-banner div {
-    font-size: 16px;
-    padding: 12px 0;
-  }
+
+#thanksgiving-overlay {
+  backdrop-filter: blur(1px);
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script>
+(function() {
+  // Set up the animation sequence
+  setTimeout(() => {
+    const overlay = document.getElementById('thanksgiving-overlay');
+    
+    // Fade in the overlay
+    overlay.style.opacity = '1';
+    
+    // Start the gentle falling snow confetti (Christmas-themed with red, green, gold, and white)
+    var duration = 8 * 1000; // Matches the visible duration (slightly longer than hold time)
+    var animationEnd = Date.now() + duration;
+    var skew = 1;
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    (function frame() {
+      var timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) {
+        return;
+      }
+
+      var ticks = Math.max(200, 500 * (timeLeft / duration));
+      skew = Math.max(0.8, skew - 0.001);
+
+      confetti({
+        particleCount: 3, // A few particles per frame for gentle snowfall/confetti feel
+        startVelocity: 0,
+        ticks: ticks,
+        origin: {
+          x: Math.random(),
+          y: (Math.random() * skew) - 0.2
+        },
+        colors: ['#ff0000', '#00ff00', '#ffd700', '#ffffff'], // Classic Christmas: red, green, gold, white
+        shapes: ['square', 'circle'], // Mix of confetti shapes for festive variety
+        gravity: randomInRange(0.4, 0.6),
+        scalar: randomInRange(0.4, 1.2),
+        drift: randomInRange(-0.4, 0.4)
+      });
+
+      requestAnimationFrame(frame);
+    })();
+
+    // Hold for ~6 seconds, then fade out
+    setTimeout(() => {
+      overlay.style.opacity = '0';
+    }, 6000);
+    
+    // Remove the overlay after fade out completes
+    setTimeout(() => {
+      overlay.remove();
+    }, 7000);
+    
+  }, 1500); // Start animation 1.5 seconds after banner loads
+
+})();
+</script>
