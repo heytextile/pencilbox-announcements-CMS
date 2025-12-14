@@ -1,80 +1,105 @@
 
-<!-- Merry Christmas 2025 Banner with Snow Animation -->
-<div class="pencilbox-banner christmas-banner" style="position:relative;z-index:1000;">
-  <canvas id="snow-canvas" style="position:absolute;top:0;left:0;width:100vw;height:100%;pointer-events:none;z-index:1;"></canvas>
-  <div class="christmas-message" style="position:relative;z-index:2;padding:18px 0;text-align:center;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:700;color:#fff;background:linear-gradient(90deg,#b91c1c 0%,#15803d 100%);box-shadow:0 2px 8px rgba(0,0,0,0.15);letter-spacing:0.5px;text-shadow:0 2px 8px #0008,0 1px 0 #fff2;">
-    🎄 Merry Christmas from Textile! 🎄
+<!-- Thanksgiving 2025 Banner - Generic for Multiple Subdomains -->
+
+<div id="thanksgiving-banner-content" style="color:#B22222;display:flex;align-items:center;justify-content:center;font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;padding:12px 20px;text-shadow:0 0 3px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.2);position:relative;z-index:1000000;">
+  <div style="font-size:18px;font-weight:700;color:#B22222;text-align:center;">
+    🦃 Happy Thanksgiving from Textile! 🍁
   </div>
 </div>
 
-<!-- Canvas Confetti Library -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-<script>
-(function() {
-  var duration = 15 * 1000;
-  var animationEnd = Date.now() + duration;
-  var skew = 1;
-  var canvas = document.getElementById('snow-canvas');
-  if (!canvas) return;
-  // Make canvas fill the banner
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = canvas.parentElement.offsetHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  function randomInRange(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  (function frame() {
-    var timeLeft = animationEnd - Date.now();
-    var ticks = Math.max(200, 500 * (timeLeft / duration));
-    skew = Math.max(0.8, skew - 0.001);
-    confetti({
-      particleCount: 1,
-      startVelocity: 0,
-      ticks: ticks,
-      origin: {
-        x: Math.random(),
-        y: (Math.random() * skew) - 0.2
-      },
-      colors: ['#ffffff'],
-      shapes: ['circle'],
-      gravity: randomInRange(0.4, 0.6),
-      scalar: randomInRange(0.4, 1),
-      drift: randomInRange(-0.4, 0.4),
-      zIndex: 2,
-      disableForReducedMotion: true,
-      // Use the custom canvas
-      resize: true,
-      useWorker: true,
-      canvas: canvas
-    });
-    if (timeLeft > 0) {
-      requestAnimationFrame(frame);
-    }
-  })();
-})();
-</script>
+<!-- Fullscreen overlay for the animation -->
+<div id="thanksgiving-overlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.1) 50%, rgba(205, 133, 63, 0.1) 100%);
+  overflow: hidden;
+">
+  <!-- Falling leaves elements -->
+  <div class="leaf" style="left: 10%; animation-delay: 0s;">🍂</div>
+  <div class="leaf" style="left: 20%; animation-delay: 0.5s;">🍁</div>
+  <div class="leaf" style="left: 30%; animation-delay: 1s;">🍂</div>
+  <div class="leaf" style="left: 40%; animation-delay: 1.5s;">🍁</div>
+  <div class="leaf" style="left: 50%; animation-delay: 2s;">🍂</div>
+  <div class="leaf" style="left: 60%; animation-delay: 0.3s;">🍁</div>
+  <div class="leaf" style="left: 70%; animation-delay: 0.8s;">🍂</div>
+  <div class="leaf" style="left: 80%; animation-delay: 1.3s;">🍁</div>
+  <div class="leaf" style="left: 90%; animation-delay: 1.8s;">🍂</div>
+  <div class="leaf" style="left: 15%; animation-delay: 0.2s;">🍁</div>
+  <div class="leaf" style="left: 35%; animation-delay: 0.7s;">🍂</div>
+  <div class="leaf" style="left: 55%; animation-delay: 1.2s;">🍁</div>
+  <div class="leaf" style="left: 75%; animation-delay: 1.7s;">🍂</div>
+  <div class="leaf" style="left: 85%; animation-delay: 0.4s;">🍁</div>
+  <div class="leaf" style="left: 25%; animation-delay: 0.9s;">🍂</div>
+  <div class="leaf" style="left: 45%; animation-delay: 1.4s;">🍁</div>
+  <div class="leaf" style="left: 65%; animation-delay: 1.9s;">🍂</div>
+  <div class="leaf" style="left: 5%; animation-delay: 0.6s;">🍁</div>
+  <div class="leaf" style="left: 95%; animation-delay: 1.1s;">🍂</div>
+</div>
 
 <style>
-.christmas-banner {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  position: relative;
-  overflow: hidden;
-  min-height: 64px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.pencilbox-banner {
+  padding: 4px 0 !important;
 }
-.christmas-message {
-  position: relative;
-  z-index: 2;
+
+.leaf {
+  position: absolute;
+  top: -50px;
+  font-size: 24px;
+  animation: fall 8s linear infinite;
+  opacity: 0.8;
 }
-@media (max-width: 600px) {
-  .christmas-banner .christmas-message {
-    font-size: 16px;
-    padding: 12px 0;
+
+@keyframes fall {
+  0% {
+    transform: translateY(-50px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
   }
 }
+
+#thanksgiving-overlay {
+  backdrop-filter: blur(1px);
+}
 </style>
+
+<script>
+(function() {
+  // Set up the animation sequence
+  setTimeout(() => {
+    const overlay = document.getElementById('thanksgiving-overlay');
+    
+    // Fade in the overlay
+    overlay.style.opacity = '1';
+    
+    // Hold for 6 seconds (enough time for leaves to fall), then fade out
+    setTimeout(() => {
+      overlay.style.opacity = '0';
+    }, 6000);
+    
+    // Remove the overlay after fade out completes
+    setTimeout(() => {
+      overlay.remove();
+    }, 7000);
+    
+  }, 1500); // Start animation 1.5 seconds after banner loads
+
+})();
+</script>
