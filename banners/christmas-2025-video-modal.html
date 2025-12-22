@@ -1,8 +1,13 @@
 
 <div id="christmas-video-modal" style="display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.55);z-index:2000000;">
-  <div style="position:relative;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.25);padding:24px 24px 16px 24px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;">
-    <button id="close-christmas-video-modal" style="position:absolute;top:8px;right:12px;font-size:2rem;background:none;border:none;cursor:pointer;color:#FF1744;z-index:2;">&times;</button>
-    <iframe src="https://player.vimeo.com/video/1148703869?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1" width="576" height="320" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="5728557921591919816" style="border-radius:10px;max-width:90vw;max-height:60vh;"></iframe>
+  <!-- Close button — now OUTSIDE the content box, in its own circle -->
+  <button id="close-christmas-video-modal" 
+          style="position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:none;cursor:pointer;font-size:24px;color:#FF1744;z-index:2000002;display:flex;align-items:center;justify-content:center;">
+    &times;
+  </button>
+  <!-- Modal content box -->
+  <div style="position:relative;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.25);padding:24px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;">
+    <iframe src="https://player.vimeo.com/video/1148703869?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;muted=1" width="576" height="320" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="border-radius:10px;max-width:90vw;max-height:60vh;"></iframe>
   </div>
 </div>
 <!-- Christmas 2025 Banner with Video Modal (Cloned from current) -->
@@ -159,13 +164,24 @@
 
 <script>
 // Modal open/close logic (ensure elements exist before attaching)
-window.onload = function() {
-  var modal = document.getElementById('christmas-video-modal');
-  var closeBtn = document.getElementById('close-christmas-video-modal');
+// Modal open/close logic (robust, external button)
+(function() {
+  const modal = document.getElementById('christmas-video-modal');
+  const closeBtn = document.getElementById('close-christmas-video-modal');
   if (closeBtn && modal) {
-    closeBtn.onclick = function() {
-      modal.classList.add('modal-hide');
-    };
+    closeBtn.addEventListener('click', () => {
+      const iframe = modal.querySelector('iframe');
+      if (iframe) iframe.src = '';
+      modal.style.display = 'none';
+    });
+    // Bonus: click backdrop to close
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        const iframe = modal.querySelector('iframe');
+        if (iframe) iframe.src = '';
+        modal.style.display = 'none';
+      }
+    });
   }
-};
+})();
 </script>
