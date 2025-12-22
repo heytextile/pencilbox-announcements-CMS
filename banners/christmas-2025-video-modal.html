@@ -1,16 +1,4 @@
-</script>
-<script>
-// Modal open/close logic (ensure elements exist before attaching)
-window.addEventListener('DOMContentLoaded', function() {
-  var modal = document.getElementById('christmas-video-modal');
-  var closeBtn = document.getElementById('close-christmas-video-modal');
-  if (closeBtn && modal) {
-    closeBtn.onclick = function() {
-      modal.classList.add('modal-hide');
-    };
-  }
-});
-<!-- Modal for Vimeo video -->
+
 <div id="christmas-video-modal" style="display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.55);z-index:2000000;">
   <div style="position:relative;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.25);padding:24px 24px 16px 24px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;">
     <button id="close-christmas-video-modal" style="position:absolute;top:8px;right:12px;font-size:2rem;background:none;border:none;cursor:pointer;color:#FF1744;z-index:2;">&times;</button>
@@ -167,4 +155,17 @@ window.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => { overlay.remove(); }, 7000);
   }, 1500);
 })();
+</script>
+
+<script>
+// Modal open/close logic (ensure elements exist before attaching)
+window.addEventListener('DOMContentLoaded', function() {
+  var modal = document.getElementById('christmas-video-modal');
+  var closeBtn = document.getElementById('close-christmas-video-modal');
+  if (closeBtn && modal) {
+    closeBtn.onclick = function() {
+      modal.classList.add('modal-hide');
+    };
+  }
+});
 </script>
