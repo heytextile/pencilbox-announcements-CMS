@@ -159,7 +159,7 @@
 
 <script>
 // Modal open/close logic (ensure elements exist before attaching)
-window.addEventListener('DOMContentLoaded', function() {
+window.onload = function() {
   var modal = document.getElementById('christmas-video-modal');
   var closeBtn = document.getElementById('close-christmas-video-modal');
   if (closeBtn && modal) {
@@ -167,5 +167,5 @@ window.addEventListener('DOMContentLoaded', function() {
       modal.classList.add('modal-hide');
     };
   }
-});
+};
 </script>
