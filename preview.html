@@ -20,5 +20,74 @@
 </head>
 <body>
     <iframe src="https://textile.pencilbox.work?key=7SwNN4WWgG8wsblKwzh43jIDHYK00QBk"></iframe>
+    <div id="banner-modal" style="position:fixed;left:0;right:0;bottom:0;width:100vw;z-index:10000;background:rgba(255,255,255,0.97);box-shadow:0 -2px 16px rgba(0,0,0,0.12);padding:24px 0 16px 0;display:flex;justify-content:center;align-items:center;gap:16px;">
+        <select id="bannerSelect" style="padding:8px 12px;font-size:16px;border-radius:4px;border:1px solid #ccc;">
+            <option value="">Select a banner...</option>
+            <option value="/banners/christmas-2025-video-modal.html">christmas-2025-video-modal.html</option>
+            <option value="/banners/christmas-2025.html">christmas-2025.html</option>
+            <option value="/banners/hfn-countdown-pastdue.html">hfn-countdown-pastdue.html</option>
+            <option value="/banners/hfn-countdown-thankyou.html">hfn-countdown-thankyou.html</option>
+            <option value="/banners/hfn-countdown.html">hfn-countdown.html</option>
+            <option value="/banners/ndr-proposal.html">ndr-proposal.html</option>
+            <option value="/banners/newyear-2026.html">newyear-2026.html</option>
+            <option value="/banners/pastdue-invoice.html">pastdue-invoice.html</option>
+            <option value="/banners/thanksgiving-2025.html">thanksgiving-2025.html</option>
+        </select>
+        <button id="previewBtn" style="padding:8px 20px;font-size:16px;border-radius:4px;background:#0066cc;color:#fff;border:none;cursor:pointer;">Preview</button>
+        <button id="clearBtn" style="padding:8px 20px;font-size:16px;border-radius:4px;background:#aaa;color:#fff;border:none;cursor:pointer;">Clear</button>
+    </div>
+    <script>
+    let currentBanner;
+    document.getElementById('previewBtn').onclick = async function() {
+        const bannerFile = document.getElementById('bannerSelect').value;
+        if (!bannerFile) return;
+        // Remove any existing preview
+        if (currentBanner) { currentBanner.remove(); currentBanner = null; }
+        // Fetch banner HTML
+        const response = await fetch(bannerFile + '?t=' + Date.now());
+        if (!response.ok) { alert('Failed to load banner'); return; }
+        const bannerHtml = await response.text();
+        // Create banner container (no flex styling)
+        const bannerContainer = document.createElement('div');
+        bannerContainer.className = 'pencilbox-banner';
+        bannerContainer.style.position = 'absolute';
+        bannerContainer.style.top = '0';
+        bannerContainer.style.left = '0';
+        bannerContainer.style.width = '100vw';
+        bannerContainer.style.zIndex = '10001';
+        bannerContainer.style.pointerEvents = 'auto';
+        bannerContainer.style.transition = 'transform 0.6s, opacity 0.6s';
+        bannerContainer.style.transform = 'translateY(-40px)';
+        bannerContainer.style.opacity = '0';
+        bannerContainer.innerHTML = '<div class="pencilbox-banner-fragment">' + bannerHtml + '<div class="banner-close" style="position:absolute;top:8px;right:24px;font-size:2rem;background:#fff;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;z-index:10003;">×</div></div>';
+        document.body.appendChild(bannerContainer);
+        currentBanner = bannerContainer;
+        // Animate banner in
+        setTimeout(() => {
+            bannerContainer.style.transform = 'translateY(0)';
+            bannerContainer.style.opacity = '1';
+        }, 10);
+        // Execute scripts in fragment
+        const scripts = bannerContainer.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+            if (oldScript.src) {
+                newScript.src = oldScript.src;
+                newScript.async = false;
+            } else {
+                newScript.textContent = oldScript.textContent;
+            }
+            oldScript.replaceWith(newScript);
+        });
+        // Close button
+        bannerContainer.querySelector('.banner-close').onclick = () => {
+            bannerContainer.remove();
+            currentBanner = null;
+        };
+    };
+    document.getElementById('clearBtn').onclick = function() {
+        if (currentBanner) { currentBanner.remove(); currentBanner = null; }
+    };
+    </script>
 </body>
 </html>
