@@ -1,91 +1,86 @@
-<!-- Happy New Year 2026 Banner -->
-<html>
-<head>
-  <title>Happy New Year 2026</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-    }
-    .center-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 8vw;
-      font-family: 'Arial Black', Arial, sans-serif;
-      color: transparent;
-      -webkit-text-stroke: 4px #fff;
-      text-stroke: 4px #fff;
-      text-align: center;
-      letter-spacing: 0.1em;
-      opacity: 1;
-      transition: opacity 2s ease-in;
-      z-index: 10;
-    }
-    .fade-out {
-      opacity: 0 !important;
-    }
-    .firework {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-    }
-  </style>
-</head>
-<body>
-  <div class="center-text" id="yearText">2026</div>
-  <script>
-    // Fade out the text after 3 seconds
-    setTimeout(() => {
-      document.getElementById('yearText').classList.add('fade-out');
-    }, 3000);
+<!-- Thanksgiving 2025 Banner - Generic for Multiple Subdomains -->
 
-    // Fireworks animation
-    function randomColor() {
-      const colors = ['#ff3', '#f06', '#0ff', '#fff', '#f90', '#0f0', '#09f', '#f0f'];
-      return colors[Math.floor(Math.random() * colors.length)];
-    }
-    function createFirework() {
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight * 0.7;
-      const size = 40 + Math.random() * 60;
-      const count = 12 + Math.floor(Math.random() * 8);
-      for (let i = 0; i < count; i++) {
-        const angle = (2 * Math.PI * i) / count;
-        const dx = Math.cos(angle) * size;
-        const dy = Math.sin(angle) * size;
-        const firework = document.createElement('div');
-        firework.className = 'firework';
-        firework.style.left = `${x}px`;
-        firework.style.top = `${y}px`;
-        firework.style.width = '8px';
-        firework.style.height = '8px';
-        firework.style.background = randomColor();
-        firework.style.boxShadow = `0 0 16px 4px ${firework.style.background}`;
-        firework.style.opacity = '1';
-        firework.style.transform = `translate(0, 0)`;
-        document.body.appendChild(firework);
-        setTimeout(() => {
-          firework.style.transition = 'transform 0.8s cubic-bezier(.5,1.8,.5,1), opacity 0.8s';
-          firework.style.transform = `translate(${dx}px, ${dy}px)`;
-          firework.style.opacity = '0';
-        }, 10);
-        setTimeout(() => {
-          firework.remove();
-        }, 1200);
-      }
-    }
-    // Launch fireworks every 600ms for 4 seconds
-    let fireworkInterval = setInterval(createFirework, 600);
+<div id="thanksgiving-banner-content" style="color:#1768d9;display:flex;align-items:center;justify-content:center;font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;padding:12px 20px;position:relative;z-index:1000000;">
+  <div style="font-size:32px;font-weight:700;color:#1768d9;text-align:center;">
+    🎉️ Happy New Year from Textile! 🎉️
+  </div>
+</div>
+
+<!-- Fireworks animation overlay -->
+<div id="fireworks-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;pointer-events:none;overflow:hidden;"></div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.pencilbox-banner {
+  padding: 4px 0 !important;
+}
+
+.firework {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+#big-2026 {
+  text-shadow: 0 0 32px #fff, 0 0 8px #1768d9;
+}
+</style>
+
+<script>
+// Create the big 2026 overlay outside of banner container
+const big2026 = document.createElement('div');
+big2026.id = 'big-2026';
+big2026.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:160px;font-weight:900;color:transparent;-webkit-text-stroke: 4px #1768d9;text-stroke: 4px #1768d9;letter-spacing:0.05em;z-index:1000001;pointer-events:none;user-select:none;opacity:1;transition:opacity 1.2s cubic-bezier(.5,1.8,.5,1);font-family:Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;text-shadow: 0 0 32px #fff, 0 0 8px #1768d9;';
+big2026.textContent = '2026';
+document.body.appendChild(big2026);
+
+// Fireworks animation
+function randomColor() {
+  const colors = ['#ff3', '#f06', '#0ff', '#fff', '#f90', '#0f0', '#09f', '#1976d2'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+function createFirework() {
+  const x = Math.random() * window.innerWidth;
+  const y = Math.random() * window.innerHeight * 0.7;
+  const size = 80 + Math.random() * 120;
+  const count = 18 + Math.floor(Math.random() * 10);
+  for (let i = 0; i < count; i++) {
+    const angle = (2 * Math.PI * i) / count;
+    const dx = Math.cos(angle) * size;
+    const dy = Math.sin(angle) * size;
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+    firework.style.left = `${x}px`;
+    firework.style.top = `${y}px`;
+    firework.style.width = '16px';
+    firework.style.height = '16px';
+    firework.style.background = randomColor();
+    firework.style.boxShadow = `0 0 32px 8px ${firework.style.background}`;
+    firework.style.opacity = '1';
+    firework.style.transform = `translate(0, 0)`;
+    document.getElementById('fireworks-overlay').appendChild(firework);
     setTimeout(() => {
-      clearInterval(fireworkInterval);
-    }, 4000);
-  </script>
-</body>
-</html>
+      firework.style.transition = 'transform 0.8s cubic-bezier(.5,1.8,.5,1), opacity 0.8s';
+      firework.style.transform = `translate(${dx}px, ${dy}px)`;
+      firework.style.opacity = '0';
+    }, 10);
+    setTimeout(() => {
+      firework.remove();
+    }, 1200);
+  }
+}
+// Launch fireworks every 600ms for 4 seconds
+let fireworkInterval = setInterval(createFirework, 600);
+setTimeout(() => {
+  clearInterval(fireworkInterval);
+  // Fade out big 2026
+  const big2026 = document.getElementById('big-2026');
+  if (big2026) {
+    big2026.style.opacity = '0';
+    setTimeout(() => {
+      big2026.remove();
+    }, 1200);
+  }
+}, 4000);
+</script>

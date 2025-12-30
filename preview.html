@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banner Preview</title>
+    <link rel="stylesheet" href="src/banner.css">
     <style>
         html, body {
             margin: 0;
@@ -59,7 +60,7 @@
         bannerContainer.style.transition = 'transform 0.6s, opacity 0.6s';
         bannerContainer.style.transform = 'translateY(-40px)';
         bannerContainer.style.opacity = '0';
-        bannerContainer.innerHTML = '<div class="pencilbox-banner-fragment">' + bannerHtml + '<div class="banner-close" style="position:absolute;top:8px;right:24px;font-size:2rem;background:#fff;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;z-index:10003;">×</div></div>';
+        bannerContainer.innerHTML = '<div class="pencilbox-banner-fragment">' + bannerHtml + '</div>';
         document.body.appendChild(bannerContainer);
         currentBanner = bannerContainer;
         // Animate banner in
