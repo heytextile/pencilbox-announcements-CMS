@@ -8,13 +8,13 @@
   "defaultDismissDays": 7,
   "clients": {
       "sandbox.pencilbox.work": {
-      "banner": "/banners/new-year-2026-video-modal.html",
+      "banner": "/banners/newyear-2026.html",
       "dismissDays": 0,
       "startDate": null,
       "endDate": null
     },
      "textile.pencilbox.work": {
-      "banner": "/banners/christmas-2025-video-modal.html",
+      "banner": "",
       "dismissDays": 0,
       "startDate": null,
       "endDate": null
